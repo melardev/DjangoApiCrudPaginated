@@ -49,7 +49,11 @@ def read_or_write_by_id(request, *args, **kwargs):
         elif request.method == 'PUT':
             data = json.loads(request.body)
             todo.title = data.get('title')
-            todo.description = data.get('description', '')
+            description = data.get('description', None)
+
+            if description is not None:
+                todo.description = description
+
             todo.completed = data.get('completed', False)
             todo.save()
             return get_response(TodoDetailsResponseDto(todo).get_data())
