@@ -3,9 +3,10 @@ from shared.serializers import PaginatedResponseDto, SuccessResponseDto
 
 class TodoListResponseDto(PaginatedResponseDto):
     def __init__(self, paginator, page_number, base_path):
-        super(TodoListResponseDto, self).__init__(paginator, page_number, base_path)
         page = paginator.get_page(page_number)
         self.todos = [TodoDto(todo, include_details=False).get_data() for todo in page.object_list.all()]
+        super(TodoListResponseDto, self).__init__(len(self.todos), paginator, page_number, base_path)
+
 
     def get_data(self):
         return {
